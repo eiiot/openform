@@ -1,13 +1,11 @@
-export interface FormData {
+export interface FormDataType {
   [key: string]: string | string[];
 }
 
-export async function submitForm(id: string, data: FormData) {
+export async function submitForm(id: string, data: FormDataType) {
   const url = `https://docs.google.com/forms/d/e/${id}/formResponse`;
 
   const formData = new FormData();
-
-  // Handle email address
 
   const email = data['emailAddress'];
 

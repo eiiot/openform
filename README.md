@@ -52,7 +52,7 @@ The options array for `GRID` questions will only display the column options, not
 
 ## `POST` method
 
-The `POST` method submits a response to the form. It takes a JSON object with the following schema:
+The `POST` method submits a response to the form. It takes a JSON object or form response with the following schema:
 
 ```
 {
@@ -61,7 +61,7 @@ The `POST` method submits a response to the form. It takes a JSON object with th
 }
 ```
 
-At the moment, openform does not support `FILE_UPLOAD`, `DATE`, `TIME` or `GRID` questions. For almost all collection, a `TEXT` question should be sufficient.
+At the moment, openform does not support `FILE_UPLOAD`, `DATE`, `TIME` or `GRID` questions. For almost all use cases, a `TEXT` question should be sufficient.
 
 ## Caching
 
