@@ -2,7 +2,7 @@
 
 A free, super simple, hosted API for programatically accessing Google Forms. _Heavily_ inspired by Ben Borgers' [opensheet](https://github.com/benborgers/opensheet).
 
-**Tutorial blog post:** Coming soon™
+**Tutorial blog post:** [eliothertenstein.com/writing/openform](https://eliothertenstein.com/writing/openform)
 
 ## Documentation
 
