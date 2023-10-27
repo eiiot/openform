@@ -27,26 +27,26 @@ const errorResponse = () => {
 
 const serveOptions: Serve = {
   fetch(req) {
+    let response: Response;
+
     switch (req.method) {
       case "GET":
-        return getHandler(req)
+        response = getHandler(req)
           .catch((err) => {
             console.error(err);
             return errorResponse();
           });
       case "POST":
-        return postHandler(req)
+        response = postHandler(req)
           .catch((err) => {
             console.error(err);
             return errorResponse();
           });
       default:
-        const response = {
+        response = new Response(JSON.stringify({
           error: true,
           message: `Invalid method: ${req.method}`,
-        }
-
-        return new Response(JSON.stringify(response), {
+        }), {
           status: 405,
           statusText: "Method Not Allowed",
           headers: {
@@ -54,6 +54,9 @@ const serveOptions: Serve = {
           }
         });
     }
+
+    response.headers.set('access-control-allow-origin', '*');
+    return response;
   },
 };
 
