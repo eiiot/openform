@@ -21,6 +21,7 @@ const errorResponse = () => {
     statusText: "Internal Server Error",
     headers: {
       "content-type": "application/json;charset=UTF-8",
+      "access-control-allow-origin": "*",
     }
   });
 }
@@ -51,6 +52,7 @@ const serveOptions: Serve = {
           statusText: "Method Not Allowed",
           headers: {
             "content-type": "application/json;charset=UTF-8",
+            "access-control-allow-origin": "*", // CORS
           }
         });
     }
@@ -79,6 +81,7 @@ const getHandler = async (req: Request) => {
       headers: {
         "content-type": "application/json;charset=UTF-8",
         "x-cache": "HIT",
+        "access-control-allow-origin": "*",
       },
     });
   }
@@ -101,6 +104,7 @@ const getHandler = async (req: Request) => {
     headers: {
       "content-type": "application/json;charset=UTF-8",
       "x-cache": "MISS",
+      "access-control-allow-origin": "*",
     },
   });
 };
@@ -117,21 +121,7 @@ const postHandler = async (req: Request) => {
 
   const contentType = req.headers.get("content-type");
 
-  if (contentType?.includes("application/json")) {
-    const json = await req.json();
-
-    const submitted = await submitForm(id, json);
-
-    console.log(`${id} - RETURNING RESPONSE WITH STATUS ${submitted.error ? 400 : 200}`);
-
-    return new Response(JSON.stringify(submitted), {
-      status: submitted.error ? 400 : 200,
-      statusText: submitted.error ? "Bad Request" : "OK",
-      headers: {
-        "content-type": "application/json;charset=UTF-8",
-      },
-    });
-  } else if (contentType?.includes("application/x-www-form-urlencoded")) {
+  if (contentType?.includes("application/x-www-form-urlencoded")) {
     const formData = await req.formData();
 
     const data = Object.fromEntries(formData.entries()) as { [key: string]: string };
@@ -145,15 +135,40 @@ const postHandler = async (req: Request) => {
       statusText: submitted.error ? "Bad Request" : "OK",
       headers: {
         "content-type": "application/json;charset=UTF-8",
+        "access-control-allow-origin": "*",
       },
     });
   } else {
-    console.log(`${id} - RETURNING RESPONSE WITH STATUS 400`);
+    try {
+      const json = await req.json();
 
-    return new Response(`Invalid content type: ${contentType}`, {
-      status: 400,
-      statusText: "Bad Request",
-    });
+      const submitted = await submitForm(id, json);
+
+      console.log(`${id} - RETURNING RESPONSE WITH STATUS ${submitted.error ? 400 : 200}`);
+
+      return new Response(JSON.stringify(submitted), {
+        status: submitted.error ? 400 : 200,
+        statusText: submitted.error ? "Bad Request" : "OK",
+        headers: {
+          "content-type": "application/json;charset=UTF-8",
+          "access-control-allow-origin": "*",
+        },
+      });
+    } catch (err) {
+      console.error(err);
+
+      return new Response(JSON.stringify({
+        error: true,
+        message: "Invalid JSON",
+      }), {
+        status: 400,
+        statusText: "Bad Request",
+        headers: {
+          "content-type": "application/json;charset=UTF-8",
+          "access-control-allow-origin": "*",
+        },
+      });
+    }
   }
 };
 
