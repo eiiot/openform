@@ -1,5 +1,7 @@
 # openform
 
+> NOTICE: This project is currently unmaintained. I may get around to fixing it soon!
+
 A free, super simple, hosted API for programatically accessing Google Forms. _Heavily_ inspired by Ben Borgers' [opensheet](https://github.com/benborgers/opensheet).
 
 **Tutorial blog post:** Coming soon™
